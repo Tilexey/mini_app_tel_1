@@ -1,9 +1,17 @@
 from sqlalchemy import ForeignKey, String, BigInteger
 from sqlalchemy.orm import Mapped, DeclarativeBase, mapped_column
 from sqlalchemy.ext.asyncio import AsyncAttrs, async_sessionmaker, create_async_engine
+import os
 
+# Отримання URL бази даних з змінних середовища Render
+DATABASE_URL = os.environ.get("DATABASE_URL")
 
-engine = create_async_engine(url='sqlite+aiosqlite:///db.sqlite3', echo=True)
+# Переконайтеся, що URL існує
+if DATABASE_URL is None:
+    raise ValueError("DATABASE_URL environment variable is not set.")
+
+# Зміна рядка підключення для PostgreSQL
+engine = create_async_engine(url=DATABASE_URL, echo=True)
 
 async_session = async_sessionmaker(bind=engine, expire_on_commit=False)
 
