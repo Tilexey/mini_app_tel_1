@@ -29,7 +29,7 @@ app = FastAPI(title="To Do App", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=['*'],
+    allow_origins=['https://todoapp-b5e79.web.app'],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -59,4 +59,5 @@ async def add_task(task: AddTask):
 @app.patch("/api/completed")
 async def complete_task(task: CompleteTask):
     await rq.update_task(task.id)
+
     return {'status': 'ok'}
