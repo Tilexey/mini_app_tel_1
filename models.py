@@ -11,7 +11,8 @@ if DATABASE_URL is None:
     raise ValueError("DATABASE_URL environment variable is not set.")
 
 # Зміна рядка підключення для PostgreSQL
-engine = create_async_engine(url=DATABASE_URL, echo=True)
+async_url = DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://")
+engine = create_async_engine(url=async_url, echo=True)
 
 async_session = async_sessionmaker(bind=engine, expire_on_commit=False)
 
@@ -39,3 +40,4 @@ class Task(Base):
 async def init_db():
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+
